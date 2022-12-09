@@ -1,0 +1,73 @@
+:root {
+  // === Colors ===
+  --textColor-1: rgb(189, 189, 189);
+  --textColor-2: #444;
+  --textColor-3: rgb(50, 50, 50);
+
+  --danger-1: #e74c3c;
+  --danger-2: #c0392b;
+
+  --success-1: #2ecc71;
+  --success-2: #27ae60;
+
+  --backgroundColor-1: #f3f3f3;
+  --backgroundColor-2: #e4e4e4;
+  --boxShadow-1: 5px 5px 15px 0px rgba(0, 0, 0, 0.12);
+
+  --borderRadius-1: 2px;
+  --borderRadius-2: 4px;
+
+  // === Fonts ===
+  --fontText: "Poppins", sans-serif;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: var(--backgroundColor-1);
+  color: var(--textColor-2);
+  font-family: var(--fontText);
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: var(--fontText);
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+.btn {
+  color: #fff;
+  padding: 1rem 1.5rem;
+}
+
+input {
+  height: 3rem;
+  border: none;
+  box-shadow: var(--boxShadow-1);
+  border-radius: var(--borderRadius-1);
+  padding: 1rem;
+  font-size: 1.8rem;
+  &::placeholder {
+    color: var(--textColor-1);
+  }
+}
