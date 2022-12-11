@@ -1,16 +1,44 @@
 <template>
   <div class="balance">
     <h1 class="balance__title">Mon compte</h1>
+    <span class="balance__welcome"
+      >Bienvenue
+      {{
+        props.accounts.firstname[0].toLocaleUpperCase() +
+        props.accounts.firstname.slice(1)
+      }}
+      {{
+        props.accounts.lastname[0].toLocaleUpperCase() +
+        props.accounts.lastname.slice(1)
+      }}</span
+    >
     <h2 class="balance__subtitle">
-      Solde actuel : <span class="balance__value">1200€</span>
+      Solde actuel : <span class="balance__value">{{ totalBalance }}€</span>
     </h2>
     <p class="balance__date">
-      Date actuel : <span class="balance__date-time">25/09/2022</span>
+      Date actuel :
+      <span class="balance__date-time">{{ dateNow.toLocaleDateString() }}</span>
     </p>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { AccountsInterface } from "@/interfaces";
+import { computed, ref } from "vue";
+
+const props = defineProps<{
+  accounts: AccountsInterface;
+}>();
+
+const totalBalance = computed(() => {
+  return props.accounts.movements.reduce((acc, movements) => {
+    acc += movements[1];
+    return acc;
+  }, 0);
+});
+
+const dateNow = ref(new Date());
+</script>
 
 <style lang="scss" scoped>
 .balance {
@@ -19,9 +47,14 @@
     font-size: 3rem;
     font-weight: 300;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--textColor-1);
-    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--success-1);
     width: 70%;
+  }
+
+  &__welcome {
+    text-align: end;
+    display: block;
+    font-size: 1.6rem;
   }
 
   &__subtitle {

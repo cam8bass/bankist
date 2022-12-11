@@ -1,8 +1,8 @@
 <template>
   <main class="content">
-    <Balance class="balance" />
-    <Movements class="movements" />
-    <TheSummary class="summary" />
+    <Balance :accounts="accounts" class="balance" />
+    <Movements :accounts="accounts" class="movements" />
+    <TheSummary :accounts="accounts" class="summary" />
     <Transfert class="transfert" />
     <Loan class="loan" />
   </main>
@@ -14,13 +14,17 @@ import Movements from "./Movements.vue";
 import TheSummary from "./Summary.vue";
 import Transfert from "./Transfert.vue";
 import Loan from "./Loan.vue";
+import type { AccountsInterface } from "@/interfaces";
+defineProps<{
+  accounts: AccountsInterface;
+}>();
 </script>
 
 <style lang="scss" scoped>
 .content {
   display: grid;
   grid-template-rows: min-content repeat(2, 25rem) min-content;
-  grid-template-columns: minmax(max-content, 1fr) minmax(min-content, 1fr);
+  grid-template-columns: minmax(max-content, 1fr) minmax(min-content, 0.5fr);
   gap: 2rem;
   grid-template-areas:
     "balance balance"

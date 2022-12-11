@@ -28,6 +28,8 @@
   box-shadow: var(--boxShadow-1);
   padding: 2rem;
   border-radius: var(--borderRadius-2);
+  background-color: rgba(#2ecc71, 0.6);
+
   &__title {
     font-size: 2rem;
     font-weight: 300;
@@ -43,6 +45,7 @@
   &__input {
     margin-right: 2rem;
     width: 100%;
+    min-width: 10rem;
 
     &-number {
       width: 13rem;

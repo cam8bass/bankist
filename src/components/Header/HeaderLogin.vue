@@ -1,7 +1,23 @@
 <template>
-  <form class="login">
-    <input type="text" class="login__input" placeholder="User" />
-    <input type="text" class="login__input" placeholder="Password" />
+  <form
+    @submit.prevent="emit('checkInputLogin', allInputs)"
+    class="login"
+    @keypress.enter="emit('checkInputLogin', allInputs)"
+  >
+    <input
+      type="text"
+      class="login__input"
+      placeholder="User"
+      :value="allInputs.username"
+      @input="allInputs.username = ($event.target as HTMLInputElement).value"
+    />
+    <input
+      type="text"
+      class="login__input"
+      placeholder="Password"
+      :value="allInputs.password"
+      @input="allInputs.password = ($event.target as HTMLInputElement).value"
+    />
     <button class="login__btn">
       <img
         src="src/assets/img/icon-login.png"
@@ -12,7 +28,26 @@
   </form>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from "vue";
+
+const allInputs = reactive<{
+  username: string;
+  password: string;
+}>({
+  username: "",
+  password: "",
+});
+
+
+
+const emit = defineEmits<{
+  (
+    e: "checkInputLogin",
+    allInputs: { username: string; password: string }
+  ): void;
+}>();
+</script>
 
 <style lang="scss" scoped>
 .login {
@@ -20,7 +55,7 @@
 
   &__input {
     margin-right: 2rem;
-    width: 10rem;
+    width: 20rem;
   }
 
   &__btn {
@@ -31,5 +66,16 @@
       height: 3rem;
     }
   }
+}
+
+.valid {
+  border-bottom: 2px solid var(--success-1);
+}
+
+.wrong {
+  border-bottom: 2px solid var(--danger-1);
+}
+.select {
+  border-bottom: 2px solid blue;
 }
 </style>

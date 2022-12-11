@@ -1,8 +1,23 @@
+import type { AccountsInterface } from "@/interfaces";
+
 export default [
   {
+    id: 1,
+    username: "cam",
     lastname: "laignel",
     firstname: "camille",
-    movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
+    movements: [
+      ["amazone prime", -6.99],
+      ["apple music", -10.99],
+      ["leclerc", -180],
+      ["salaire", +2000],
+      ["impot", -83],
+      ["fleuriste", -32],
+      ["tabac", -90],
+      ["edf", -160],
+      ["eau", -60],
+      ["pension", 240],
+    ],
     interestRate: 1.2, // %
     pin: 1111,
 
@@ -15,18 +30,28 @@ export default [
       "2020-07-26T17:01:17.194Z",
       "2020-07-28T23:36:17.929Z",
       "2020-08-01T10:51:36.790Z",
+      "2022-05-15T10:51:36.790Z",
+      "2021-03-10T10:51:36.790Z",
     ],
-    currency: "EUR",
   },
   {
+    id: 2,
+    username: "so",
     lastname: "philippe",
     firstname: "sophie",
-    movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+    movements: [
+      ["La tricote", -80],
+      ["Le cheval magic", -74, 99],
+      ["leclerc", -150],
+      ["salaire", +2560],
+      ["impot", -99],
+      ["edf", -60],
+      ["eau", -30],
+    ],
     interestRate: 1.5,
     pin: 2222,
 
     movementsDates: [
-      "2019-11-01T13:15:33.035Z",
       "2019-11-30T09:48:16.867Z",
       "2019-12-25T06:04:23.907Z",
       "2020-01-25T14:18:46.235Z",
@@ -35,6 +60,5 @@ export default [
       "2020-06-25T18:49:59.371Z",
       "2020-07-26T12:01:20.894Z",
     ],
-    currency: "USD",
   },
-];
+] as AccountsInterface[];
