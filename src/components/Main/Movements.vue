@@ -26,10 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import type { AccountsInterface } from "@/interfaces";
+import type {  CurrentAccount } from "@/interfaces";
 
 const props = defineProps<{
-  accounts: AccountsInterface;
+  accounts: CurrentAccount;
 }>();
 </script>
 

@@ -2,13 +2,28 @@
   <div class="transfert">
     <h4 class="transfert__title">Virements</h4>
     <div class="transfert__block">
-      <input type="text" class="transfert__input" placeholder="Destinataire" />
+      <input
+        type="text"
+        class="transfert__input"
+        placeholder="Destinataire"
+        :value="inputTransfert.recipient"
+        @input="
+          inputTransfert.recipient = ($event.target as HTMLInputElement).value
+        "
+      />
       <input
         type="number"
         class="transfert__input transfert__input-number"
         placeholder="Montant"
+        :value="inputTransfert.amount"
+        @input="
+          inputTransfert.amount = +($event.target as HTMLInputElement).value
+        "
       />
-      <button class="transfert__btn">
+      <button
+        class="transfert__btn"
+        @click="emit('requestTransfert', inputTransfert)"
+      >
         <img
           src="src/assets/img/icon-arrowRight.png"
           alt="icon arrow right"
@@ -19,7 +34,24 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from "vue";
+
+const inputTransfert = reactive<{
+  recipient: string;
+  amount: number;
+}>({
+  recipient: "",
+  amount: 0,
+});
+
+const emit = defineEmits<{
+  (
+    e: "requestTransfert",
+    allInput: { recipient: string; amount: number }
+  ): void;
+}>();
+</script>
 
 <style lang="scss" scoped>
 .transfert {

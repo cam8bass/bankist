@@ -1,50 +1,32 @@
 <template>
   <div class="summary">
     <p class="summary__text">
-      Dépôt : <span class="summary__text-in">{{ totalDeposit }}€</span>
+      Dépôt :
+      <span class="summary__text-in"
+        >{{ props.accounts.total.totalDeposit }}€</span
+      >
     </p>
     <p class="summary__text">
-      Retrait : <span class="summary__text-out">{{ totalWithdrawal }}€</span>
+      Retrait :
+      <span class="summary__text-out"
+        >{{ props.accounts.total.totalWithdrawal }}€</span
+      >
     </p>
     <p class="summary__interest">
-      Frais : <span class="summary__interest-number">{{ totalInterest }}€</span>
+      Frais :
+      <span class="summary__interest-number"
+        >{{ props.accounts.total.totalInterest }}€</span
+      >
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { AccountsInterface } from "@/interfaces";
-import { computed } from "vue";
+import type { CurrentAccount } from "@/interfaces";
 
 const props = defineProps<{
-  accounts: AccountsInterface;
+  accounts: CurrentAccount;
 }>();
-
-const totalDeposit = computed<number>(() => {
-  return props.accounts.movements.reduce((acc, mov) => {
-    if (mov[1] > 0) {
-      acc += mov[1];
-      return acc;
-    } else {
-      return acc;
-    }
-  }, 0);
-});
-
-const totalWithdrawal = computed<number>(() => {
-  return props.accounts.movements.reduce((acc, mov) => {
-    if (mov[1] < 0) {
-      acc += mov[1];
-      return acc;
-    } else {
-      return acc;
-    }
-  }, 0);
-});
-
-const totalInterest = computed<number>(() => {
-  return (totalDeposit.value * props.accounts.interestRate) / 100;
-});
 </script>
 
 <style lang="scss" scoped>

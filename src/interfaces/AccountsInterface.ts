@@ -9,6 +9,15 @@ export interface AccountsInterface {
   movementsDates: string[];
 }
 
+export interface CurrentAccount extends AccountsInterface {
+  total: {
+    totalBalance: any;
+    totalDeposit: any;
+    totalWithdrawal: any;
+    totalInterest: any;
+  };
+}
+
 export const DEFAULT_ACCOUNT = {
   id: 0,
   username: "",
@@ -18,4 +27,10 @@ export const DEFAULT_ACCOUNT = {
   interestRate: 0,
   pin: 0,
   movementsDates: [],
+  total: {
+    totalBalance: 0,
+    totalDeposit: 0,
+    totalWithdrawal: 0,
+    totalInterest: 0,
+  },
 };

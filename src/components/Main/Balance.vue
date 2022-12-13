@@ -13,7 +13,8 @@
       }}</span
     >
     <h2 class="balance__subtitle">
-      Solde actuel : <span class="balance__value">{{ totalBalance }}€</span>
+      Solde actuel :
+      <span class="balance__value">{{ accounts.total.totalBalance }}€</span>
     </h2>
     <p class="balance__date">
       Date actuel :
@@ -23,19 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import type { AccountsInterface } from "@/interfaces";
-import { computed, ref } from "vue";
+import type { CurrentAccount } from "@/interfaces";
+import { ref } from "vue";
 
 const props = defineProps<{
-  accounts: AccountsInterface;
+  accounts: CurrentAccount;
 }>();
 
-const totalBalance = computed(() => {
-  return props.accounts.movements.reduce((acc, movements) => {
-    acc += movements[1];
-    return acc;
-  }, 0);
-});
 
 const dateNow = ref(new Date());
 </script>

@@ -1,6 +1,6 @@
 <template>
   <nav class="navigation">
-    <button class="btn navigation__btn" @click="emit('logout')">
+    <button @click="emit('logout')" class="btn navigation__btn">
       Deconnecter
     </button>
   </nav>

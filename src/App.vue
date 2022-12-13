@@ -2,7 +2,7 @@
   <div class="container">
     <TheHeader
       class="header"
-      @checkInputLogin="checkAllInput"
+      @checkInputLogin="updateInputLogin"
       :isConnect="state.connected"
       @logout="logout"
     />
@@ -10,6 +10,8 @@
       v-if="state.connected"
       :accounts="state.currentAccount"
       class="main"
+      @loan="requestLoan"
+      @requestTransfert="requestTrasfert"
     />
     <TheFooter class="footer" />
   </div>
@@ -18,13 +20,17 @@
 import TheHeader from "./components/Header/TheHeader.vue";
 import TheFooter from "./components/Footer/TheFooter.vue";
 import TheMain from "./components/Main/TheMain.vue";
-import { reactive } from "vue";
-import { DEFAULT_ACCOUNT, type AccountsInterface } from "./interfaces";
+import { computed, reactive } from "vue";
+import {
+  DEFAULT_ACCOUNT,
+  type AccountsInterface,
+  type CurrentAccount,
+} from "./interfaces";
 import accountsData from "./data/data";
 
 const state = reactive<{
   allAccounts: AccountsInterface[];
-  currentAccount: AccountsInterface;
+  currentAccount: CurrentAccount;
   connected: boolean;
 }>({
   allAccounts: accountsData,
@@ -32,29 +38,117 @@ const state = reactive<{
   connected: false,
 });
 
-function checkAllInput(allInput: { username: string; password: string }): void {
-  const { username, password } = allInput;
+function requestLoan(amount: number): void {
+  state.currentAccount.movements.push(["Pret bancaire", amount]);
+  state.currentAccount.movementsDates.push(new Date().toISOString());
+}
 
-  if (username !== undefined && password !== undefined) {
-    const account = state.allAccounts.find((account) => {
+function requestTrasfert(allInputs: {
+  recipient: string;
+  amount: number;
+}): void {
+  if (allInputs.amount && allInputs.recipient) {
+    const accountRecipient = state.allAccounts.find((account) => {
       return (
-        account.username.toLocaleLowerCase() === username.toLocaleLowerCase() &&
-        account.pin === +password
+        account.firstname.toLocaleLowerCase() ===
+          allInputs.recipient.toLocaleLowerCase() ||
+        account.lastname.toLocaleLowerCase() ===
+          allInputs.recipient.toLocaleLowerCase() ||
+        account.username.toLocaleLowerCase() ===
+          allInputs.recipient.toLocaleLowerCase()
       );
     });
 
-    if (account) {
-      state.currentAccount = account;
-      state.connected = true;
-    } else {
-      return;
+    if (accountRecipient) {
+      if (state.currentAccount.total.totalBalance > allInputs.amount) {
+        state.currentAccount.movements.push([
+          `Virement à ${allInputs.recipient}`,
+          -allInputs.amount,
+        ]);
+        state.currentAccount.movementsDates.push(new Date().toISOString());
+
+        accountRecipient.movements.push([
+          `Virement de ${state.currentAccount.firstname.toLocaleLowerCase()}`,
+          allInputs.amount,
+        ]);
+        accountRecipient.movementsDates.push(new Date().toISOString());
+      }
     }
   }
 }
 
 function logout(): void {
-  state.connected = false;
-  state.currentAccount = { ...DEFAULT_ACCOUNT };
+  if (state.connected) {
+    state.connected = false;
+    state.currentAccount = { ...DEFAULT_ACCOUNT };
+  }
+}
+
+const totalBalance = computed<number>(() => {
+  return state.currentAccount.movements.reduce((acc, movements) => {
+    acc += movements[1];
+    return +acc.toFixed(2);
+  }, 0);
+});
+
+const totalDeposit = computed<number>(() => {
+  return state.currentAccount.movements.reduce((acc, movements) => {
+    if (movements[1] > 0) {
+      acc += movements[1];
+      return acc;
+    } else {
+      return acc;
+    }
+  }, 0);
+});
+
+const totalInterest = computed<number>(() => {
+  const interest =
+    (totalDeposit.value * state.currentAccount.interestRate) / 100;
+  return +interest.toFixed(2);
+});
+
+const totalWithdrawal = computed<number>(() => {
+  return state.currentAccount.movements.reduce((acc, movements) => {
+    if (movements[1] < 0) {
+      acc += movements[1];
+      return +acc.toFixed(2);
+    } else {
+      return acc;
+    }
+  }, 0);
+});
+
+function updateInputLogin(allInput: {
+  username: string;
+  password: string;
+}): void {
+  const { username, password } = allInput;
+
+  if (username !== undefined && password !== undefined) {
+    const account = state.allAccounts.find((accounts) => {
+      return (
+        accounts.username.toLocaleLowerCase() ===
+          username.toLocaleLowerCase() && accounts.pin === +password
+      );
+    });
+
+    if (account) {
+      state.currentAccount = {
+        ...account,
+        total: {
+          totalBalance: totalBalance,
+          totalDeposit: totalDeposit,
+          totalInterest: totalInterest,
+          totalWithdrawal: totalWithdrawal,
+        },
+      };
+      state.connected = true;
+    } else {
+      state.currentAccount = { ...DEFAULT_ACCOUNT };
+      state.connected = false;
+    }
+  }
 }
 </script>
 

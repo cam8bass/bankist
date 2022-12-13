@@ -3,8 +3,15 @@
     <Balance :accounts="accounts" class="balance" />
     <Movements :accounts="accounts" class="movements" />
     <TheSummary :accounts="accounts" class="summary" />
-    <Transfert class="transfert" />
-    <Loan class="loan" />
+    <Transfert
+      class="transfert"
+      @requestTransfert="emit('requestTransfert', $event)"
+    />
+    <Loan
+      class="loan"
+      :totalDeposit="accounts.total.totalDeposit"
+      @loan="emit('loan', $event)"
+    />
   </main>
 </template>
 
@@ -14,9 +21,16 @@ import Movements from "./Movements.vue";
 import TheSummary from "./Summary.vue";
 import Transfert from "./Transfert.vue";
 import Loan from "./Loan.vue";
-import type { AccountsInterface } from "@/interfaces";
+import type { CurrentAccount } from "@/interfaces";
 defineProps<{
-  accounts: AccountsInterface;
+  accounts: CurrentAccount;
+}>();
+const emit = defineEmits<{
+  (e: "loan", amount: number): void;
+  (
+    e: "requestTransfert",
+    allInput: { recipient: string; amount: number }
+  ): void;
 }>();
 </script>
 

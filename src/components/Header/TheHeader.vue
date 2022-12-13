@@ -5,26 +5,25 @@
       <span class="header__brand">Bankist</span>
     </a>
     <HeaderLogin
-      v-if="!props.isConnect"
+      v-if="!isConnect"
       @checkInputLogin="emit('checkInputLogin', $event)"
     />
-    <HeaderNavigation v-if="props.isConnect" @logout="$emit('logout')" />
+    <HeaderNavigation v-if="isConnect" @logout="emit('logout')" />
   </header>
 </template>
 
 <script setup lang="ts">
 import HeaderLogin from "./HeaderLogin.vue";
 import HeaderNavigation from "./HeaderNavigation.vue";
+defineProps<{
+  isConnect: boolean;
+}>();
 const emit = defineEmits<{
   (
     e: "checkInputLogin",
     allInputs: { username: string; password: string }
   ): void;
   (e: "logout"): void;
-}>();
-
-const props = defineProps<{
-  isConnect: boolean;
 }>();
 </script>
 
